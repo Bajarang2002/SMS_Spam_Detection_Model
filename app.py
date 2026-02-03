@@ -1,13 +1,11 @@
 import streamlit as st
 import pickle
 import string
-import nltk
-nltk.download("punkt", quiet=True)
-nltk.download("punkt_tab", quiet=True)
-nltk.download("stopwords", quiet=True)
+
+
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 from nltk.stem.porter import PorterStemmer
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 
 
 
@@ -71,19 +69,18 @@ def load_resources():
 model, tfidf = load_resources()
 
 ps = PorterStemmer()
-stop_words = set(stopwords.words("english"))
 
 # --------------------------------------------------
 # Text Processing
 # --------------------------------------------------
 def transform_text(text):
     text = text.lower()
-    tokens = word_tokenize(text)
+    tokens = text.split()
 
     cleaned = [
         ps.stem(word)
         for word in tokens
-        if word.isalnum() and word not in stop_words
+        if word.isalnum() and word not in ENGLISH_STOP_WORDS
     ]
 
     return " ".join(cleaned)
